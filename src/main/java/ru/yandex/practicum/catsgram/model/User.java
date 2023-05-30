@@ -24,4 +24,13 @@ public class User {
     public LocalDate getBirthdate() {
         return birthdate;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", birthdate=" + birthdate +
+                '}';
+    }
 }
