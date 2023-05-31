@@ -8,7 +8,6 @@ import ru.yandex.practicum.catsgram.service.UserService;
 import java.util.List;
 
 @RestController
-
 public class UserController {
     private final UserService userService;
 
@@ -20,6 +19,11 @@ public class UserController {
     @GetMapping("/users")
     public List<User> findAll() {
         return userService.findAll();
+    }
+
+    @GetMapping("/users/{email}")
+    public User findByEmail(@PathVariable String email) {
+        return userService.findByEmail(email).orElse(null);
     }
 
     @PostMapping(value = "/users")
