@@ -17,8 +17,17 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> findAll() {
-        return postService.findAll();
+    public List<Post> findAll(
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer size,
+            @RequestParam(defaultValue = "DESC", required = false) String sort) {
+        if (0 < page || 0 <= size) {
+            throw new IllegalArgumentException();
+        } else if (!(sort.equalsIgnoreCase("asc")) || !(sort.equalsIgnoreCase("desc"))) {
+            throw new IllegalArgumentException();
+        }
+        Integer from = page * size;
+        return postService.findAll(size, sort, from);
     }
 
     @GetMapping("/posts/{id}")

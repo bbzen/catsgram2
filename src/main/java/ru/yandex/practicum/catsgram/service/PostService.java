@@ -7,6 +7,7 @@ import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -19,8 +20,20 @@ public class PostService {
         this.userService = userService;
     }
 
-    public List<Post> findAll() {
-        return new ArrayList<>(posts.values());
+    public List<Post> findAll(Integer size, String sort, Integer from) {
+
+        return new ArrayList<>(posts.values())
+                .stream()
+                .sorted((p1, p2) ->{
+                    int multiplier = -1;
+                    if (sort.equalsIgnoreCase("asc")) {
+                        multiplier = 1;
+                    }
+                    return Math.toIntExact(p1.getCreationDate().toEpochMilli() - p2.getCreationDate().toEpochMilli() * multiplier);
+                })
+                .skip(from)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     public Post findById(int id) {
