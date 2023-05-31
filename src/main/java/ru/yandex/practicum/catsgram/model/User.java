@@ -3,9 +3,9 @@ package ru.yandex.practicum.catsgram.model;
 import java.time.LocalDate;
 
 public class User {
-    private String email;
-    private String nickname;
-    private LocalDate birthdate;
+    private final String email;
+    private final String nickname;
+    private final LocalDate birthdate;
 
     public User(String email, String nickname, LocalDate birthdate) {
         this.email = email;

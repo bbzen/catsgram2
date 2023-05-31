@@ -3,7 +3,7 @@ package ru.yandex.practicum.catsgram.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.exception.InvalidEmailException;
-import ru.yandex.practicum.catsgram.exception.UserAlreadyExistException;
+import ru.yandex.practicum.catsgram.exception.UserException;
 import ru.yandex.practicum.catsgram.model.User;
 
 import java.util.ArrayList;
@@ -20,11 +20,15 @@ public class UserService {
         return users;
     }
 
+    public Optional<User> findByEmail(String email) {
+        return users.stream().filter(x -> x.getEmail().equalsIgnoreCase(email)).findFirst();
+    }
+
     public User create(User user) {
         isNoEmail(user);
         boolean isEmailExists = users.stream().anyMatch(a -> a.getEmail().equalsIgnoreCase(user.getEmail()));
         if (isEmailExists) {
-            throw new UserAlreadyExistException("Пользователь с указанным адресом электронной почты уже существует.");
+            throw new UserException("Пользователь с указанным адресом электронной почты уже существует.");
         }
         users.add(user);
         log.debug(user.toString());
