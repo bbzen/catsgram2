@@ -26,7 +26,7 @@ public class UserController {
         return userService.findByEmail(email).orElse(null);
     }
 
-    @PostMapping(value = "/users")
+    @PostMapping("/users")
     public User create(@RequestBody User user) {
         return userService.create(user);
     }

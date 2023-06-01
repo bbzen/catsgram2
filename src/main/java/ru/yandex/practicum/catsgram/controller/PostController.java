@@ -35,7 +35,7 @@ public class PostController {
         return postService.findById(id);
     }
 
-    @PostMapping(value = "/post")
+    @PostMapping("/post")
     public void create(@RequestBody Post post) {
         postService.create(post);
     }
