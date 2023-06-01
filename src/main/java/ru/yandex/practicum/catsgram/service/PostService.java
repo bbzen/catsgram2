@@ -21,7 +21,6 @@ public class PostService {
     }
 
     public List<Post> findAll(Integer size, String sort, Integer from) {
-
         return new ArrayList<>(posts.values())
                 .stream()
                 .sorted((p1, p2) ->{
@@ -32,6 +31,21 @@ public class PostService {
                     return Math.toIntExact(p1.getCreationDate().toEpochMilli() - p2.getCreationDate().toEpochMilli() * multiplier);
                 })
                 .skip(from)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    public List<Post> findAllByEmail(String email, Integer size, String sort) {
+        return new ArrayList<>(posts.values())
+                .stream()
+                .filter(p -> p.getAuthorEmail().equalsIgnoreCase(email))
+                .sorted((p1, p2) ->{
+                    int multiplier = -1;
+                    if (sort.equalsIgnoreCase("asc")) {
+                        multiplier = 1;
+                    }
+                    return Math.toIntExact(p1.getCreationDate().toEpochMilli() - p2.getCreationDate().toEpochMilli() * multiplier);
+                })
                 .limit(size)
                 .collect(Collectors.toList());
     }
