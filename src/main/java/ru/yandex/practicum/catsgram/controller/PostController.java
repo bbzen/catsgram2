@@ -2,6 +2,7 @@ package ru.yandex.practicum.catsgram.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.catsgram.exception.IncorrectParameterException;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.service.PostService;
 
@@ -21,8 +22,10 @@ public class PostController {
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer size,
             @RequestParam(defaultValue = "DESC", required = false) String sort) {
-        if (0 < page ||  size <= 0) {
-            throw new IllegalArgumentException();
+        if (0 < page) {
+            throw new IncorrectParameterException("Номер выбранной не может быть отрицательным", page.toString());
+        } else if (size <= 0) {
+            throw new IncorrectParameterException("Количество постов для отображени не может быть равным или меньше нуля", size.toString());
         } else if (!(sort.equalsIgnoreCase("asc")) && !(sort.equalsIgnoreCase("desc"))) {
             throw new IllegalArgumentException();
         }
