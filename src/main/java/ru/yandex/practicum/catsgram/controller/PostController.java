@@ -32,14 +32,4 @@ public class PostController {
         Integer from = page * size;
         return postService.findAll(size, sort, from);
     }
-
-    @GetMapping("/posts/{id}")
-    public Post findById(@PathVariable Integer id) {
-        return postService.findById(id);
-    }
-
-    @PostMapping("/post")
-    public void create(@RequestBody Post post) {
-        postService.create(post);
-    }
 }

@@ -1,36 +1,14 @@
 package ru.yandex.practicum.catsgram.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
+@Data
 public class User {
-    private final String email;
-    private final String nickname;
-    private final LocalDate birthdate;
-
-    public User(String email, String nickname, LocalDate birthdate) {
-        this.email = email;
-        this.nickname = nickname;
-        this.birthdate = birthdate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "email='" + email + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", birthdate=" + birthdate +
-                '}';
-    }
+    private String id;
+    private String username;
+    private String nickname;
 }

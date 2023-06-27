@@ -23,7 +23,7 @@ public class PostService {
     public List<Post> findAll(Integer size, String sort, Integer from) {
         return new ArrayList<>(posts.values())
                 .stream()
-                .sorted((p1, p2) ->{
+                .sorted((p1, p2) -> {
                     int multiplier = -1;
                     if (sort.equalsIgnoreCase("asc")) {
                         multiplier = 1;
@@ -39,7 +39,7 @@ public class PostService {
         return new ArrayList<>(posts.values())
                 .stream()
                 .filter(p -> p.getAuthorEmail().equalsIgnoreCase(email))
-                .sorted((p1, p2) ->{
+                .sorted((p1, p2) -> {
                     int multiplier = -1;
                     if (sort.equalsIgnoreCase("asc")) {
                         multiplier = 1;
@@ -50,19 +50,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public Post findById(int id) {
-        if (posts.containsKey(id)) {
-            return posts.get(id);
-        }
-        return null;
-    }
-
-    public void create(Post post) {
-        Optional<User> userValue = userService.findByEmail(post.getAuthorEmail());
-        if (userValue.isEmpty()) {
-            throw new UserException(String.format("Пользователь %s не найден.", post.getAuthorEmail()));
-        }
-        post.setId(++id);
-        posts.put(post.getId(), post);
+    public Optional<Post> findUserById(String id) {
+        return Optional.ofNullable(posts.get(id));
     }
 }
