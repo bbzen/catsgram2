@@ -1,56 +1,42 @@
 package ru.yandex.practicum.catsgram.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.catsgram.dao.PostDao;
 import ru.yandex.practicum.catsgram.exception.UserException;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-    private final Map<Integer, Post> posts = new HashMap<>();
+    private final PostDao postDao;
     private final UserService userService;
-    private int id = 0;
 
-    @Autowired
-    public PostService(UserService userService) {
+    public PostService(PostDao postDao, UserService userService) {
+        this.postDao = postDao;
         this.userService = userService;
     }
 
-    public List<Post> findAll(Integer size, String sort, Integer from) {
-        return new ArrayList<>(posts.values())
-                .stream()
-                .sorted((p1, p2) -> {
-                    int multiplier = -1;
-                    if (sort.equalsIgnoreCase("asc")) {
-                        multiplier = 1;
-                    }
-                    return Math.toIntExact(p1.getCreationDate().toEpochMilli() - p2.getCreationDate().toEpochMilli() * multiplier);
-                })
-                .skip(from)
-                .limit(size)
-                .collect(Collectors.toList());
+    public Collection<Post> findPostsByUser(String userId) {
+        User user = userService.findUserById(userId)
+                .orElseThrow(() ->new UserException("Пользователь с идентификатором " + userId + " не найден."));
+
+        return postDao.findPostsByUser(user);
     }
 
-    public List<Post> findAllByEmail(String email, Integer size, String sort) {
-        return new ArrayList<>(posts.values())
+    public Collection<Post> findPostsByUser(String authorId, Integer size, String sort) {
+        return findPostsByUser(authorId)
                 .stream()
-                .filter(p -> p.getAuthorEmail().equalsIgnoreCase(email))
-                .sorted((p1, p2) -> {
-                    int multiplier = -1;
-                    if (sort.equalsIgnoreCase("asc")) {
-                        multiplier = 1;
+                .sorted((p0, p1) -> {
+                    int comp = p0.getCreationDate().compareTo(p1.getCreationDate()); //прямой порядок сортировки
+                    if (sort.equals("desc")) {
+                        comp = -1 * comp; //обратный порядок сортировки
                     }
-                    return Math.toIntExact(p1.getCreationDate().toEpochMilli() - p2.getCreationDate().toEpochMilli() * multiplier);
+                    return comp;
                 })
                 .limit(size)
                 .collect(Collectors.toList());
-    }
-
-    public Optional<Post> findUserById(String id) {
-        return Optional.ofNullable(posts.get(id));
     }
 }
