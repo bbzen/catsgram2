@@ -29,3 +29,4 @@ hs_err_pid*
 /target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
 /target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
 /target/surefire-reports/test.java.ru.yandex.practicum.catsgram.CatsgramApplicationTests.txt
+/catsgram.iml
