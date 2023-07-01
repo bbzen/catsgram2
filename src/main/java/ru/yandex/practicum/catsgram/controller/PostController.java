@@ -20,4 +20,9 @@ public class PostController {
     public Collection<Post> findAll(@RequestParam String userId) {
         return postService.findPostsByUser(userId);
     }
+
+    @GetMapping("/posts/feeds")
+    public Collection<Post> getFollowFeeds(@RequestParam String userId, @RequestParam int max) {
+        return postService.getFollowFeeds(userId, max);
+    }
 }

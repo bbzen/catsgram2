@@ -1,6 +1,8 @@
 package ru.yandex.practicum.catsgram.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.catsgram.dao.FollowDao;
 import ru.yandex.practicum.catsgram.dao.PostDao;
 import ru.yandex.practicum.catsgram.exception.UserException;
 import ru.yandex.practicum.catsgram.model.Post;
@@ -10,14 +12,12 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PostService {
+    private final FollowDao followDao;
     private final PostDao postDao;
     private final UserService userService;
 
-    public PostService(PostDao postDao, UserService userService) {
-        this.postDao = postDao;
-        this.userService = userService;
-    }
 
     public Collection<Post> findPostsByUser(String userId) {
         User user = userService.findUserById(userId)
@@ -38,5 +38,9 @@ public class PostService {
                 })
                 .limit(size)
                 .collect(Collectors.toList());
+    }
+
+    public Collection<Post> getFollowFeeds(String userId, int max) {
+        return followDao.getFollowFeeds(userId, max);
     }
 }

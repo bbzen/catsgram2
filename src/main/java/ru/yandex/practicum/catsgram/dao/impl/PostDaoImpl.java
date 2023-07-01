@@ -1,6 +1,5 @@
 package ru.yandex.practicum.catsgram.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -15,17 +14,19 @@ import java.util.Collection;
 
 @Component
 public class PostDaoImpl implements PostDao {
+
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public PostDaoImpl(JdbcTemplate jdbcTemplate) {
+    public PostDaoImpl(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public Collection<Post> findPostsByUser(User user) {
-        String sqlQuerry = "select * from cat_post where author_id = ? order by creation_date desc";
-        return jdbcTemplate.query(sqlQuerry, new RowMapper<Post>() {
+        // метод принимает в виде аргумента строку запроса, преобразователь и аргумент — id пользователя
+        String sql = "select * from cat_post where author_id = ? order by creation_date desc";
+
+        return jdbcTemplate.query(sql, new RowMapper<Post>() {
             @Override
             public Post mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return PostDaoImpl.this.makePost(user, rs);
@@ -33,9 +34,9 @@ public class PostDaoImpl implements PostDao {
         }, user.getId());
     }
 
-    private Post makePost(User author, ResultSet rs) throws SQLException {
+    private Post makePost(User user, ResultSet rs) throws SQLException {
         // используем конструктор, методы ResultSet
-        // и готовое значение author
+        // и готовое значение user
         Integer id = rs.getInt("id");
         String description = rs.getString("description");
         String photoUrl = rs.getString("photo_url");
@@ -43,6 +44,6 @@ public class PostDaoImpl implements PostDao {
         // Получаем дату и конвертируем её из sql.Date в time.LocalDate
         LocalDate creationDate = rs.getDate("creation_date").toLocalDate();
 
-        return new Post(id, author, creationDate, description, photoUrl);
+        return new Post(id, user, description, photoUrl, creationDate);
     }
 }
