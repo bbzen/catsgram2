@@ -1,7 +1,6 @@
 package ru.yandex.practicum.catsgram.dao.impl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.catsgram.dao.FollowDao;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class FollowDaoImpl implements FollowDao {
     private final JdbcTemplate jdbcTemplate;
 
